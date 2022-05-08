@@ -1,8 +1,52 @@
-from usuario import *
-from trajes import *
-from aluguel import *
+from bd_usuario import *
+from bd_trajes import *
+from bd_aluguel import *
+from export_json import *
 import time
 import os
+from getpass import getpass
+
+
+def truncate(f, n):
+    s = '{}'.format(f)
+    if 'e' in s or 'E' in s:
+        return '{0:.{1}f}'.format(f, n)
+    i, p, d = s.partition('.')
+    return '.'.join([i, (d+'0'*n)[:n]])
+
+
+def exportar_jsons():
+    os.system("cls")
+    print("Exportando JSONS...")
+    colocar_jsons_em_arquivos()
+    print("JSONS exportados com sucesso!")
+    time.sleep(2)
+    menu_escolhas()
+
+
+def cadastrar_trajes_opcao():
+    try:
+        os.system("cls")
+        print("-------------------- CADASTRO DE TRAJES --------------------")
+        nome = input("Digite o nome do traje: ")
+        valor = truncate(float(
+            ''.join(input("Digite o valor do traje: R$ ").split('.')).replace(',', '.')), 2)
+        quantidade = int(input("Digite a quantidade de trajes: "))
+        cadastrar_trajes(nome, valor, quantidade)
+        print("Traje cadastrado com sucesso!")
+        time.sleep(2)
+    except Exception as e:
+        print("Erro: ", e)
+        time.sleep(2)
+        cadastrar_trajes_opcao()
+
+
+def mostra_trajes():
+    os.system("cls")
+    print("-------------------- TRAJES --------------------")
+    mostrar_trajes()
+    input("Digite qualquer tecla para voltar: ")
+    menu_escolhas()
 
 
 def tela_inicial():
@@ -50,9 +94,9 @@ def cadastrar():
         else:
             tela_inicial()
     else:
-        senha = input("Digite sua senha: ")
+        senha = getpass("Digite sua senha: ")
         while senha_segura(senha) == False:
-            senha = input("Digite sua senha: ")
+            senha = getpass("Digite sua senha: ")
 
         cadastro(usuario, senha)
         time.sleep(3)
@@ -63,7 +107,7 @@ def login():
     os.system("cls")
     print("-------------------- LOGIN --------------------")
     usuario = input("Digite seu usuário: ")
-    senha = input("Digite sua senha: ")
+    senha = getpass("Digite sua senha: ")
 
     if verificar_usuario(usuario, senha):
         print("Login realizado com sucesso!")
@@ -92,15 +136,34 @@ def mostrar_dados_usuario():
             mostrar_dados_usuario()
 
 
+def menu():
+    os.system("cls")
+    print("-------------------- TAKE DRESS --------------------")
+    print("1 - Cadastrar trajes")
+    print("2 - Listar trajes")
+    print("3 - Excluir trajes")
+    print("4 - Alugar trajes")
+    print("5 - Excluir aluguel")
+    print("6 - Listar alugueis")
+    print("7 - Alterar aluguel")
+    print("8 - Alterar minha senha")
+    print("9 - Mostrar meu id, usuário e senha")
+    print("10 - Importar dados da API")
+    print("11 - Mostrar dados importados")
+    print("12 - Exportar dados para JSON")
+    print("13 - Zipar JSONS")
+    print("14 - Sair")
+
+
 def menu_escolhas():
     escolha = "1"
-    while escolha != "10":
+    while escolha != "13":
         menu()
         escolha = input("Digite sua opção: ")
         if escolha == "1":
-            cadastrar_trajes()
+            cadastrar_trajes_opcao()
         elif escolha == "2":
-            mostrar_trajes()
+            mostra_trajes()
         elif escolha == "3":
             excluir_trajes()
         elif escolha == "4":
@@ -115,25 +178,21 @@ def menu_escolhas():
             alterar_senha()
         elif escolha == "9":
             mostrar_dados_usuario()
-        elif escolha == "10":
+        elif escolha == "12":
+            exportar_jsons()
+        elif escolha == "13":
+            try:
+                os.system("cls")
+                zipar_jsons()
+            except Exception as e:
+                print("Erro: ", e)
+                print("Primeiro exporte os dados para um arquivo JSON!")
+                time.sleep(2)
+                menu_escolhas()
+        elif escolha == "14":
             tela_inicial()
         else:
             print("Opção inválida!")
-
-
-def menu():
-    os.system("cls")
-    print("-------------------- TAKE DRESS --------------------")
-    print("1 - Cadastrar trajes")
-    print("2 - Listar trajes")
-    print("3 - Excluir trajes")
-    print("4 - Alugar trajes")
-    print("5 - Excluir aluguel")
-    print("6 - Listar alugueis")
-    print("7 - Alterar aluguel")
-    print("8 - Alterar minha senha")
-    print("9 - Mostrar meu id, usuário e senha")
-    print("10 - Sair")
 
 
 tela_inicial()

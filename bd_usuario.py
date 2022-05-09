@@ -1,5 +1,4 @@
 from bd_conexao import cursor, conexao_mysql
-import json
 
 
 def verificar_usuario(usuario, senha):
@@ -82,3 +81,20 @@ def exportar_json():
             "senha": usuario[2]
         })
     return usuarios_json
+
+
+def verificar_senha(usuario, senha):
+    cursor.execute(
+        "SELECT * FROM usuarios WHERE usuario = %s AND senha = %s", (usuario, senha))
+    result = cursor.fetchone()
+    if result:
+        return True
+    else:
+        return False
+
+
+def alterar_senha_usuario(usuario, senha):
+    cursor.execute(
+        "UPDATE usuarios SET senha = %s WHERE usuario = %s", (senha, usuario))
+    conexao_mysql.commit()
+    print("Senha alterada com sucesso!")

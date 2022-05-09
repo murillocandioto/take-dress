@@ -5,6 +5,10 @@ from export_json import *
 import time
 import os
 from getpass import getpass
+from usuario import Usuario
+from datetime import date, timedelta
+
+usuario = Usuario(1, '', '')
 
 
 def truncate(f, n):
@@ -41,12 +45,61 @@ def cadastrar_trajes_opcao():
         cadastrar_trajes_opcao()
 
 
-def mostra_trajes():
+def mostrar_trajes_opcao():
     os.system("cls")
     print("-------------------- TRAJES --------------------")
     mostrar_trajes()
     input("Digite qualquer tecla para voltar: ")
     menu_escolhas()
+
+
+def excluir_trajes_opcao():
+    try:
+        os.system("cls")
+        print("-------------------- EXCLUIR TRAJE --------------------")
+        id_traje = input("Digite o nome do traje que deseja excluir: ")
+        if verificar_traje(id_traje):
+            excluir_traje(id_traje)
+            print("Traje excluido com sucesso!")
+            time.sleep(2)
+        else:
+            print("Traje não encontrado!")
+            time.sleep(2)
+        menu_escolhas()
+    except Exception as e:
+        print("Erro: ", e)
+        time.sleep(2)
+        menu_escolhas()
+
+
+def alugar_trajes_opcao():
+    try:
+        os.system("cls")
+        print("-------------------- ALUGUEL DE TRAJES --------------------")
+        id_traje = input("Digite o id do traje que deseja alugar: ")
+        if verificar_traje(id_traje):
+            quantidade = int(
+                input("Digite a quantidade de trajes que deseja alugar: "))
+            if verificar_quantidade_traje(id_traje, quantidade):
+                data_aluguel = date.today()
+                data_devolucao = date.today() + timedelta(7)
+                valor = valor_total_trajes(id_traje, quantidade)
+                alugar_trajes(usuario.id, id_traje, data_aluguel,
+                              data_devolucao, valor)
+                subtrair_trajes(id_traje, quantidade)
+                print("Traje alugado com sucesso!")
+                time.sleep(2)
+            else:
+                print("Quantidade de trajes insuficiente!")
+                time.sleep(2)
+        else:
+            print("Traje não encontrado!")
+            time.sleep(2)
+        menu_escolhas()
+    except Exception as e:
+        print("Erro: ", e)
+        time.sleep(2)
+        menu_escolhas()
 
 
 def tela_inicial():
@@ -85,8 +138,8 @@ def sobre():
 def cadastrar():
     os.system("cls")
     print("-------------------- CADASTRO DE USUÁRIO --------------------")
-    usuario = input("Digite seu usuário: ")
-    if verificar_usuario_cadastrado(usuario):
+    usuario.set_usuario(input("Digite seu usuário: "))
+    if verificar_usuario_cadastrado(usuario.get_usuario()):
         print("Usuário já cadastrado!")
         tentar = input("Deseja tentar novamente? (S/N): ")
         if tentar == "S":
@@ -94,11 +147,11 @@ def cadastrar():
         else:
             tela_inicial()
     else:
-        senha = getpass("Digite sua senha: ")
-        while senha_segura(senha) == False:
-            senha = getpass("Digite sua senha: ")
+        usuario.set_senha(getpass("Digite sua senha: "))
+        while senha_segura(usuario.get_senha()) == False:
+            usuario.set_senha(getpass("Digite sua senha: "))
 
-        cadastro(usuario, senha)
+        cadastro(usuario.get_usuario(), usuario.get_senha())
         time.sleep(3)
         tela_inicial()
 
@@ -106,10 +159,10 @@ def cadastrar():
 def login():
     os.system("cls")
     print("-------------------- LOGIN --------------------")
-    usuario = input("Digite seu usuário: ")
-    senha = getpass("Digite sua senha: ")
+    usuario.set_usuario(input("Digite seu usuário: "))
+    usuario.set_senha(getpass("Digite sua senha: "))
 
-    if verificar_usuario(usuario, senha):
+    if verificar_usuario(usuario.get_usuario(), usuario.get_senha()):
         print("Login realizado com sucesso!")
         menu_escolhas()
     else:
@@ -124,28 +177,109 @@ def login():
 def mostrar_dados_usuario():
     os.system("cls")
     print("-------------------- DADOS DO USUÁRIO --------------------")
-    usuario = input("Digite seu usuário: ")
-    if verificar_usuario_cadastrado(usuario):
-        mostrar_usuario_logado(usuario)
+    senha = getpass("Digite sua senha para ver seus dados: ")
+    if verificar_usuario(usuario.get_usuario(), senha):
+        mostrar_usuario_logado(usuario.get_usuario())
         controle = input("Digite qualquer tecla para voltar: ")
         menu_escolhas()
     else:
-        print("Usuário não cadastrado!")
+        print("Senha incorreta!")
         tentar = input("Deseja tentar novamente? (S/N): ")
         if tentar == "S":
             mostrar_dados_usuario()
+        else:
+            menu_escolhas()
+
+
+def alterar_senha():
+    os.system("cls")
+    print("-------------------- ALTERAR SENHA --------------------")
+    if verificar_usuario_cadastrado(usuario.get_usuario()):
+        usuario.set_senha(getpass("Digite sua senha atual: "))
+        if verificar_senha(usuario.get_usuario(), usuario.get_senha()):
+            usuario.set_senha(getpass("Digite sua nova senha: "))
+            while senha_segura(usuario.get_senha()) == False:
+                usuario.set_senha(getpass("Digite sua nova senha: "))
+            alterar_senha_usuario(usuario.get_usuario(), usuario.get_senha())
+            time.sleep(2)
+            menu_escolhas()
+        else:
+            print("Senha incorreta!")
+            tentar = input("Deseja tentar novamente? (S/N): ")
+            if tentar == "S":
+                alterar_senha()
+            else:
+                menu_escolhas()
+
+
+def mostrar_alugueis_usuario_opcao():
+    os.system("cls")
+    print("-------------------- ALUGUEIS --------------------")
+    mostrar_alugueis_usuario(usuario.get_usuario())
+    controle = input("Digite qualquer tecla para voltar: ")
+    menu_escolhas()
+
+
+def excluir_aluguel_opcao():
+    try:
+        os.system("cls")
+        print("-------------------- EXCLUIR ALUGUEL --------------------")
+        aluguel = int(input("Digite o número do aluguel que deseja excluir: "))
+        if verificar_aluguel(usuario.get_usuario(), aluguel):
+            excluir_aluguel(usuario.get_usuario(), aluguel)
+            print("Aluguel excluído com sucesso!")
+            time.sleep(2)
+            menu_escolhas()
+        else:
+            print("Aluguel não encontrado!")
+            tentar = input("Deseja tentar novamente? (S/N): ")
+            if tentar == "S":
+                excluir_aluguel_opcao()
+            else:
+                menu_escolhas()
+    except:
+        print("Provavelmente você digitou um número inválido!")
+        time.sleep(2)
+        menu_escolhas()
+
+
+def editar_trajes_opcao():
+    try:
+        os.system("cls")
+        print("-------------------- EDITAR TRAJES --------------------")
+        id_traje = int(input("Digite o número do traje que deseja editar: "))
+        if verificar_traje(id_traje):
+            nome = input("Digite o novo nome do traje: ")
+            preco = truncate(float(
+                ''.join(input("Digite o valor do traje: R$ ").split('.')).replace(',', '.')), 2)
+            quantidade = int(input("Digite a nova quantidade do traje: "))
+            editar_trajes(id_traje, nome, preco, quantidade)
+            print("Traje editado com sucesso!")
+            time.sleep(2)
+            menu_escolhas()
+        else:
+            print("Traje não encontrado!")
+            tentar = input("Deseja tentar novamente? (S/N): ")
+            if tentar == "S":
+                editar_trajes_opcao()
+            else:
+                menu_escolhas()
+    except:
+        print("Provavelmente você digitou um valor inválido!")
+        time.sleep(2)
+        menu_escolhas()
 
 
 def menu():
     os.system("cls")
     print("-------------------- TAKE DRESS --------------------")
     print("1 - Cadastrar trajes")
-    print("2 - Listar trajes")
-    print("3 - Excluir trajes")
-    print("4 - Alugar trajes")
-    print("5 - Excluir aluguel")
-    print("6 - Listar alugueis")
-    print("7 - Alterar aluguel")
+    print("2 - Mostrar trajes")
+    print("3 - Editar trajes")
+    print("4 - Excluir trajes")
+    print("5 - Alugar trajes")
+    print("6 - Mostrar alugueis")
+    print("7 - Excluir alugueis")
     print("8 - Alterar minha senha")
     print("9 - Mostrar meu id, usuário e senha")
     print("10 - Importar dados da API")
@@ -163,17 +297,17 @@ def menu_escolhas():
         if escolha == "1":
             cadastrar_trajes_opcao()
         elif escolha == "2":
-            mostra_trajes()
+            mostrar_trajes_opcao()
         elif escolha == "3":
-            excluir_trajes()
+            editar_trajes_opcao()
         elif escolha == "4":
-            alugar_trajes()
+            excluir_trajes_opcao()
         elif escolha == "5":
-            excluir_aluguel()
+            alugar_trajes_opcao()
         elif escolha == "6":
-            listar_alugueis()
+            mostrar_alugueis_usuario_opcao()
         elif escolha == "7":
-            alterar_aluguel()
+            excluir_aluguel_opcao()
         elif escolha == "8":
             alterar_senha()
         elif escolha == "9":
@@ -184,6 +318,7 @@ def menu_escolhas():
             try:
                 os.system("cls")
                 zipar_jsons()
+                time.sleep(2)
             except Exception as e:
                 print("Erro: ", e)
                 print("Primeiro exporte os dados para um arquivo JSON!")

@@ -1,5 +1,4 @@
 from bd_conexao import cursor, conexao_mysql
-import json
 
 
 def truncate(f, n):
@@ -24,26 +23,46 @@ def mostrar_trajes():
             f"ID do traje: {traje[0]} \t Nome: {traje[1]} \t Preço: R${truncate(traje[2],2).replace('.',',')} \t Quantidade: {traje[3]}")
 
 
-def excluir_trajes(id_traje):
+def excluir_traje(id_traje):
     cursor.execute("DELETE FROM trajes WHERE id = %s", (id_traje,))
     conexao_mysql.commit()
 
 
 def editar_trajes(id_traje, nome, preco, quantidade):
-    cursor.execute("UPDATE trajes SET nome = %s, preco = %s, quantidade = %s WHERE id = %s",
+    cursor.execute("UPDATE trajes SET nome = %s, valor = %s, quantidade = %s WHERE id = %s",
                    (nome, preco, quantidade, id_traje))
     conexao_mysql.commit()
 
 
-def diminuir_um_traje(id_traje):
-    cursor.execute(
-        "UPDATE trajes SET quantidade = quantidade - 1 WHERE id = %s", (id_traje,))
-    conexao_mysql.commit()
+def verificar_traje(id_traje):
+    cursor.execute("SELECT * FROM trajes WHERE id = %s", (id_traje,))
+    result = cursor.fetchone()
+    if result:
+        return True
+    else:
+        return False
 
 
-def adicionar_um_traje(id_traje):
+def verificar_quantidade_traje(id_traje, quantidade):
     cursor.execute(
-        "UPDATE trajes SET quantidade = quantidade + 1 WHERE id = %s", (id_traje,))
+        "SELECT * FROM trajes WHERE id = %s AND quantidade >= %s", (id_traje, quantidade))
+    result = cursor.fetchone()
+    if result:
+        return True
+    else:
+        return False
+
+
+def valor_total_trajes(id_traje, quantidade):
+    cursor.execute("SELECT * FROM trajes WHERE id = %s", (id_traje,))
+    traje = cursor.fetchone()
+    valor_total = traje[2] * quantidade
+    return valor_total
+
+
+def subtrair_trajes(id_traje, quantidade):
+    cursor.execute(
+        "UPDATE trajes SET quantidade = quantidade - %s WHERE id = %s", (quantidade, id_traje))
     conexao_mysql.commit()
 
 

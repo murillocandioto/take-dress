@@ -11,6 +11,12 @@ def verificar_usuario(usuario, senha):
         return False
 
 
+def pegar_id_usuario(usuario):
+    cursor.execute("SELECT id FROM usuarios WHERE usuario = %s", (usuario,))
+    result = cursor.fetchone()
+    return result[0]
+
+
 def senha_segura(senha):
 
     if len(senha) <= 8:

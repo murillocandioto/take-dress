@@ -84,6 +84,9 @@ def alugar_trajes_opcao():
                 data_aluguel = date.today()
                 data_devolucao = date.today() + timedelta(7)
                 valor = valor_total_trajes(id_traje, quantidade)
+                os.system('cls')
+                print(usuario.id)
+                time.sleep(2)
                 alugar_trajes(usuario.id, id_traje, data_aluguel,
                               data_devolucao, valor)
                 subtrair_trajes(id_traje, quantidade)
@@ -159,10 +162,12 @@ def cadastrar():
 def login():
     os.system("cls")
     print("-------------------- LOGIN --------------------")
+
     usuario.set_usuario(input("Digite seu usuário: "))
     usuario.set_senha(getpass("Digite sua senha: "))
 
     if verificar_usuario(usuario.get_usuario(), usuario.get_senha()):
+        usuario.set_id(pegar_id_usuario(usuario.get_usuario()))
         print("Login realizado com sucesso!")
         menu_escolhas()
     else:

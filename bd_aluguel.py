@@ -1,4 +1,14 @@
 from bd_conexao import cursor, conexao_mysql
+from funcoes import data_en_brasil
+from prettytable import PrettyTable
+
+
+def truncate(f, n):
+    s = '{}'.format(f)
+    if 'e' in s or 'E' in s:
+        return '{0:.{1}f}'.format(f, n)
+    i, p, d = s.partition('.')
+    return '.'.join([i, (d+'0'*n)[:n]])
 
 
 def alugar_trajes(id_usuario, id_traje, data_aluguel, data_devolucao, valor):
@@ -45,12 +55,16 @@ def exportar_json():
 
 
 def mostrar_alugueis_usuario(usuario):
+    tableAluguel = PrettyTable()
     cursor.execute(
         "SELECT id FROM usuarios WHERE usuario = %s", (usuario,))
     id_usuario = cursor.fetchone()[0]
     cursor.execute(
         "SELECT * FROM alugueis WHERE id_usuario = %s", (id_usuario,))
     alugueis = cursor.fetchall()
+    tableAluguel.field_names = ["ID", "ID_TRAJE",
+                                "DATA_ALUGUEL", "DATA_DEVOLUCAO", "VALOR"]
     for aluguel in alugueis:
-        print(
-            f"ID do aluguel: {aluguel[0]} \t ID do usuario: {aluguel[1]} \t ID do traje: {aluguel[2]} \t Data do aluguel: {aluguel[3]} \t Data da devolução: {aluguel[4]} \t Valor: R${aluguel[5]}")
+        tableAluguel.add_row(
+            [aluguel[0], aluguel[2], data_en_brasil(aluguel[3]), data_en_brasil(aluguel[4]), f'R${truncate(aluguel[5],2)}'.replace('.', ',')])
+    print(tableAluguel)

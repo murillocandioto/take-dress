@@ -1,12 +1,6 @@
 from bd_conexao import cursor, conexao_mysql
-
-
-def truncate(f, n):
-    s = '{}'.format(f)
-    if 'e' in s or 'E' in s:
-        return '{0:.{1}f}'.format(f, n)
-    i, p, d = s.partition('.')
-    return '.'.join([i, (d+'0'*n)[:n]])
+from funcoes import truncate
+from prettytable import PrettyTable
 
 
 def cadastrar_trajes(nome, valor, quantidade):
@@ -16,11 +10,14 @@ def cadastrar_trajes(nome, valor, quantidade):
 
 
 def mostrar_trajes():
+    tableTrajes = PrettyTable()
     cursor.execute("SELECT * FROM trajes")
     trajes = cursor.fetchall()
+    tableTrajes.field_names = ["ID", "NOME", "VALOR", "QUANTIDADE"]
     for traje in trajes:
-        print(
-            f"ID do traje: {traje[0]} \t Nome: {traje[1]} \t Preço: R${truncate(traje[2],2).replace('.',',')} \t Quantidade: {traje[3]}")
+        tableTrajes.add_row(
+            [traje[0], traje[1], f"R${truncate(traje[2],2)}".replace('.', ','), traje[3]])
+    print(tableTrajes)
 
 
 def excluir_traje(id_traje):

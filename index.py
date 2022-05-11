@@ -68,6 +68,7 @@ def excluir_trajes_opcao():
         menu_escolhas()
     except Exception as e:
         print("Erro: ", e)
+        print("Não é possível excluir um traje que já foi alugado!!!!!!!!")
         time.sleep(2)
         menu_escolhas()
 

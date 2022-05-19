@@ -1,4 +1,4 @@
-from bd_conexao import cursor, conexao_mysql
+from .bd_conexao import cursor, conexao_mysql
 
 
 def verificar_usuario(usuario, senha):

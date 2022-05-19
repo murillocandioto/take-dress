@@ -1,4 +1,4 @@
-from bd_conexao import cursor, conexao_mysql
+from .bd_conexao import cursor, conexao_mysql
 from funcoes import truncate
 from prettytable import PrettyTable
 

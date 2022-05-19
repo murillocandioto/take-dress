@@ -1,11 +1,11 @@
-from bd_usuario import *
-from bd_trajes import *
-from bd_aluguel import *
+from database.bd_usuario import *
+from database.bd_trajes import *
+from database.bd_aluguel import *
 from export_json import *
 import time
 import os
 from getpass import getpass
-from usuario import Usuario
+from classes.usuario import Usuario
 from datetime import date, timedelta
 
 usuario = Usuario(1, '', '')

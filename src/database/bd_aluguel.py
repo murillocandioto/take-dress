@@ -1,4 +1,4 @@
-from bd_conexao import cursor, conexao_mysql
+from .bd_conexao import cursor, conexao_mysql
 from funcoes import data_en_brasil
 from prettytable import PrettyTable
 

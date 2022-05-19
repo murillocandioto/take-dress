@@ -1,6 +1,6 @@
-from bd_usuario import exportar_json as json_usuarios
-from bd_trajes import exportar_json as json_trajes
-from bd_aluguel import exportar_json as json_alugueis
+from database.bd_usuario import exportar_json as json_usuarios
+from database.bd_trajes import exportar_json as json_trajes
+from database.bd_aluguel import exportar_json as json_alugueis
 import json
 import zipfile
 import os

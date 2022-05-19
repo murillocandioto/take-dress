@@ -9,9 +9,12 @@ def cadastrar_trajes(nome, valor, quantidade):
     conexao_mysql.commit()
 
 
-def mostrar_trajes():
+def mostrar_trajes(admin_usuario):
     tableTrajes = PrettyTable()
-    cursor.execute("SELECT * FROM trajes")
+    if admin_usuario:
+        cursor.execute("SELECT * FROM trajes")
+    else:
+        cursor.execute("SELECT * FROM trajes WHERE quantidade != 0")
     trajes = cursor.fetchall()
     tableTrajes.field_names = ["ID", "NOME", "VALOR", "QUANTIDADE"]
     for traje in trajes:

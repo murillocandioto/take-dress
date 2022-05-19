@@ -49,7 +49,7 @@ def cadastrar_trajes_opcao():
 def mostrar_trajes_opcao():
     os.system("cls")
     print("-------------------- TRAJES --------------------")
-    mostrar_trajes()
+    mostrar_trajes(usuario.get_admin())
     input("Digite qualquer tecla para voltar: ")
     menu_escolhas()
 
@@ -319,11 +319,16 @@ def excluir_usuario_opcao():
     try:
         os.system("cls")
         print("-------------------- EXCLUIR USUÁRIO --------------------")
-        usuario = input("Digite o nome do usuário que deseja excluir: ")
-        if verificar_usuario_cadastrado(usuario):
-            excluir_usuario(usuario)
-            time.sleep(2)
-            menu_escolhas()
+        usuario2 = input("Digite o nome do usuário que deseja excluir: ")
+        if verificar_usuario_cadastrado(usuario2):
+            excluir_usuario(usuario2)
+            if(usuario.get_usuario() == usuario2):
+                print("Você excluiu sua conta! Voltando para a tela de login...")
+                time.sleep(2)
+                tela_inicial()
+            else:
+                time.sleep(2)
+                menu_escolhas()
         else:
             print("Usuário não encontrado!")
             tentar = input("Deseja tentar novamente? (S/N): ")
@@ -332,7 +337,7 @@ def excluir_usuario_opcao():
             else:
                 menu_escolhas()
     except:
-        print("Provavelmente você digitou um número inválido!")
+        print("Não é possível excluir um usuário que já realizou algum aluguel!")
         time.sleep(2)
         menu_escolhas()
 

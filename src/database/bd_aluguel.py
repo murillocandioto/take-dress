@@ -68,3 +68,15 @@ def mostrar_alugueis_usuario(usuario):
         tableAluguel.add_row(
             [aluguel[0], aluguel[2], data_en_brasil(aluguel[3]), data_en_brasil(aluguel[4]), f'R${truncate(aluguel[5],2)}'.replace('.', ',')])
     print(tableAluguel)
+
+
+def mostrar_todos_alugueis():
+    tableAluguel = PrettyTable()
+    cursor.execute("SELECT * FROM alugueis")
+    alugueis = cursor.fetchall()
+    tableAluguel.field_names = ["ID", "ID_USUARIO", "ID_TRAJE",
+                                "DATA_ALUGUEL", "DATA_DEVOLUCAO", "VALOR"]
+    for aluguel in alugueis:
+        tableAluguel.add_row(
+            [aluguel[0], aluguel[1], aluguel[2], data_en_brasil(aluguel[3]), data_en_brasil(aluguel[4]), f'R${truncate(aluguel[5],2)}'.replace('.', ',')])
+    print(tableAluguel)

@@ -1,4 +1,5 @@
 from .bd_conexao import cursor, conexao_mysql
+from prettytable import PrettyTable
 
 
 def verificar_usuario(usuario, senha):
@@ -104,3 +105,19 @@ def alterar_senha_usuario(usuario, senha):
         "UPDATE usuarios SET senha = %s WHERE usuario = %s", (senha, usuario))
     conexao_mysql.commit()
     print("Senha alterada com sucesso!")
+
+
+def mostrar_todos_usuarios_cadastrados():
+    tableUsuarios = PrettyTable()
+    tableUsuarios.field_names = ["ID", "Usuário", "Senha"]
+    cursor.execute("SELECT * FROM usuarios")
+    usuarios = cursor.fetchall()
+    for usuario in usuarios:
+        tableUsuarios.add_row([usuario[0], usuario[1], usuario[2]])
+    print(tableUsuarios)
+
+
+def excluir_usuario(usuario):
+    cursor.execute("DELETE FROM usuarios WHERE usuario = %s", (usuario,))
+    conexao_mysql.commit()
+    print("Usuário excluído com sucesso!")

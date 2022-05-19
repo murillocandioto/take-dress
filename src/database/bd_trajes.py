@@ -42,7 +42,7 @@ def verificar_traje(id_traje):
 
 def verificar_quantidade_traje(id_traje, quantidade):
     cursor.execute(
-        "SELECT * FROM trajes WHERE id = %s AND quantidade >= %s", (id_traje, quantidade))
+        "SELECT * FROM trajes WHERE id = %s AND quantidade >= %s AND quantidade != 0", (id_traje, quantidade))
     result = cursor.fetchone()
     if result:
         return True

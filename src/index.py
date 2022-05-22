@@ -1,7 +1,10 @@
+from email.mime import image
 from database.bd_usuario import *
 from database.bd_trajes import *
 from database.bd_aluguel import *
+from database.bd_imagens import *
 from export_json import *
+from api import *
 import time
 import os
 from getpass import getpass
@@ -350,6 +353,49 @@ def mostrar_todos_alugueis_opcao():
     menu_escolhas()
 
 
+def capturar_imagem():
+    try:
+        os.system("cls")
+        print("---- CAPTURAR IMAGEM DE UM SITE ----")
+        urlPrint = input("Digite a url que deseja tirar uma captura de tela: ")
+        viewport = input(
+            "Digite a resolução que deseja usar. Exemplo(1920x1080): ")
+        width = input("Digite a largura desejada para a imagem: ")
+        name = input("Digite o nome que deseja dar a imagem: ")
+
+        url = url_building(urlPrint, viewport, width)
+        imagem = get_image_and_convert_to_blob(url)
+        save_blob_image_on_database(imagem, name)
+        print("Imagem salva com sucesso!")
+        time.sleep(2)
+        menu_escolhas()
+    except:
+        print("Não foi possível capturar a imagem!")
+        time.sleep(2)
+        menu_escolhas()
+
+
+def mostrar_imagens():
+    os.system("cls")
+    print("-------------------- IMAGENS SALVAS --------------------")
+    mostrar_todas_as_imagens_em_uma_tabela()
+    id = input("Digite o número da imagem que deseja visualizar: ")
+    if verificar_imagem(id):
+        mostrar_imagem_na_tela(id)
+        escolher_outra = input("Deseja visualizar outra imagem? (S/N): ")
+        if(escolher_outra == "S"):
+            mostrar_imagens()
+        else:
+            menu_escolhas()
+    else:
+        print("Imagem não encontrada!")
+        tentar = input("Deseja tentar novamente? (S/N): ")
+        if tentar == "S":
+            mostrar_imagens()
+        else:
+            menu_escolhas()
+
+
 def menu():
     os.system("cls")
     print("-------------------- TAKE DRESS --------------------")
@@ -363,8 +409,8 @@ def menu():
         print("7 - Excluir aluguéis")
         print("8 - Alterar minha senha")
         print("9 - Mostrar meu id, usuário e senha")
-        print("10 - Importar dados da API")
-        print("11 - Mostrar dados importados")
+        print("10 - Tirar print de um website e salvar no banco de dados")
+        print("11 - Mostrar uma das imagens salvas")
         print("12 - Exportar dados para JSON")
         print("13 - Zipar JSONS")
         print("14 - Mostrar todos os usuários")
@@ -403,6 +449,10 @@ def menu_escolhas():
                 alterar_senha()
             elif escolha == "9":
                 mostrar_dados_usuario()
+            elif escolha == "10":
+                capturar_imagem()
+            elif escolha == "11":
+                mostrar_imagens()
             elif escolha == "12":
                 exportar_jsons()
             elif escolha == "13":

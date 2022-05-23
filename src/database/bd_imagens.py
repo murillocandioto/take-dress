@@ -35,3 +35,16 @@ def mostrar_imagem_na_tela(id):
     imagem = cursor.fetchone()
     img = Image.open(io.BytesIO(imagem[1]))
     img.show()
+
+
+def exportar_json():
+    cursor.execute("SELECT * FROM imagens")
+    imagens = cursor.fetchall()
+    imagens_json = []
+    for imagem in imagens:
+        imagens_json.append({
+            "id": imagem[0],
+            "imagem": str(imagem[1]),
+            "nome": imagem[2],
+        })
+    return imagens_json

@@ -1,4 +1,3 @@
-from colorama import Cursor
 from .bd_conexao import conexao_mysql
 from prettytable import PrettyTable
 from api import *

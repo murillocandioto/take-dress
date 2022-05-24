@@ -50,8 +50,9 @@ def excluir_aluguel(usuario, id_aluguel):
 
 
 def exportar_json():
-    cursor = conexao_mysqle.cursor()
     conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
+
     cursor.execute("SELECT * FROM alugueis")
     alugueis = cursor.fetchall()
     alugueis_json = []

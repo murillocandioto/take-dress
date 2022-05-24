@@ -60,7 +60,7 @@ def excluir_trajes_opcao():
     try:
         os.system("cls")
         print("-------------------- EXCLUIR TRAJE --------------------")
-        id_traje = input("Digite o nome do traje que deseja excluir: ")
+        id_traje = input("Digite o id do traje que deseja excluir: ")
         if verificar_traje(id_traje):
             excluir_traje(id_traje)
             print("Traje excluido com sucesso!")

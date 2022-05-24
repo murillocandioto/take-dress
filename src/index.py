@@ -1,4 +1,3 @@
-from email.mime import image
 from database.bd_usuario import *
 from database.bd_trajes import *
 from database.bd_aluguel import *

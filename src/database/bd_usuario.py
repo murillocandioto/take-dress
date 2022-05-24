@@ -1,20 +1,27 @@
-from .bd_conexao import cursor, conexao_mysql
+from .bd_conexao import conexao_mysql
 from prettytable import PrettyTable
 
 
 def verificar_usuario(usuario, senha):
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     cursor.execute(
         "SELECT * FROM usuarios WHERE usuario = %s AND senha = %s", (usuario, senha))
     result = cursor.fetchone()
     if result:
+        conexao_mysqle.close()
         return True
     else:
+        conexao_mysqle.close()
         return False
 
 
 def pegar_id_usuario(usuario):
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     cursor.execute("SELECT id FROM usuarios WHERE usuario = %s", (usuario,))
     result = cursor.fetchone()
+    conexao_mysqle.close()
     return result[0]
 
 
@@ -47,37 +54,52 @@ def senha_segura(senha):
 
 
 def verificar_usuario_cadastrado(usuario):
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     cursor.execute("SELECT * FROM usuarios WHERE usuario = %s", (usuario,))
     result = cursor.fetchone()
     if result:
+        conexao_mysqle.close()
         return True
     else:
+        conexao_mysqle.close()
         return False
 
 
 def cadastro(usuario, senha):
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     cursor.execute(
         "INSERT INTO usuarios (usuario, senha) VALUES (%s, %s)", (usuario, senha))
-    conexao_mysql.commit()
+    conexao_mysqle.commit()
     print("Cadastro realizado com sucesso!")
+    conexao_mysqle.close()
 
 
 def mostrar_usuario_logado(usuario):
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     cursor.execute("SELECT * FROM usuarios WHERE usuario = %s", (usuario,))
     result = cursor.fetchone()
     print(f"ID: {result[0]}")
     print(f"Usuário: {result[1]}")
     print(f"Senha: {result[2]}")
+    conexao_mysqle.close()
 
 
 def alterar_senha(usuario, senha):
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     cursor.execute(
         "UPDATE usuarios SET senha = %s WHERE usuario = %s", (senha, usuario))
-    conexao_mysql.commit()
+    conexao_mysqle.commit()
     print("Senha alterada com sucesso!")
+    conexao_mysqle.close()
 
 
 def exportar_json():
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     cursor.execute("SELECT * FROM usuarios")
     usuarios = cursor.fetchall()
     usuarios_json = []
@@ -87,27 +109,37 @@ def exportar_json():
             "usuario": usuario[1],
             "senha": usuario[2]
         })
+    conexao_mysqle.close()
     return usuarios_json
 
 
 def verificar_senha(usuario, senha):
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     cursor.execute(
         "SELECT * FROM usuarios WHERE usuario = %s AND senha = %s", (usuario, senha))
     result = cursor.fetchone()
     if result:
+        conexao_mysqle.close()
         return True
     else:
+        conexao_mysqle.close()
         return False
 
 
 def alterar_senha_usuario(usuario, senha):
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     cursor.execute(
         "UPDATE usuarios SET senha = %s WHERE usuario = %s", (senha, usuario))
-    conexao_mysql.commit()
+    conexao_mysqle.commit()
     print("Senha alterada com sucesso!")
+    conexao_mysqle.close()
 
 
 def mostrar_todos_usuarios_cadastrados():
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     tableUsuarios = PrettyTable()
     tableUsuarios.field_names = ["ID", "Usuário", "Senha"]
     cursor.execute("SELECT * FROM usuarios")
@@ -115,9 +147,13 @@ def mostrar_todos_usuarios_cadastrados():
     for usuario in usuarios:
         tableUsuarios.add_row([usuario[0], usuario[1], usuario[2]])
     print(tableUsuarios)
+    conexao_mysqle.close()
 
 
 def excluir_usuario(usuario):
+    conexao_mysqle = conexao_mysql()
+    cursor = conexao_mysqle.cursor()
     cursor.execute("DELETE FROM usuarios WHERE usuario = %s", (usuario,))
-    conexao_mysql.commit()
+    conexao_mysqle.commit()
     print("Usuário excluído com sucesso!")
+    conexao_mysqle.close()

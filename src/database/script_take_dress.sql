@@ -26,10 +26,20 @@ FOREIGN KEY(id_traje) REFERENCES trajes(id),
 FOREIGN KEY(id_usuario) REFERENCES usuarios(id)
 );
 
+CREATE TABLE imagens(
+id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+imagem LONGBLOB,
+nome VARCHAR(200)
+)
+
 SELECT * FROM trajes;
 SELECT * FROM usuarios; 
 SELECT * FROM alugueis;
+SELECT * FROM imagens;
+
+DELETE FROM imagens WHERE ID >= 1 ;
 
 DROP TABLE trajes;
 DROP TABLE usuarios;
 DROP TABLE alugueis;
+DROP table imagens;

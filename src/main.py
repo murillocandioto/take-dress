@@ -10,16 +10,9 @@ from getpass import getpass
 from classes.usuario import Usuario
 from datetime import date, timedelta
 from prettytable import PrettyTable
+from funcoes import truncate
 
 usuario = Usuario(1, '', '')
-
-
-def truncate(f, n):
-    s = '{}'.format(f)
-    if 'e' in s or 'E' in s:
-        return '{0:.{1}f}'.format(f, n)
-    i, p, d = s.partition('.')
-    return '.'.join([i, (d+'0'*n)[:n]])
 
 
 def exportar_jsons():

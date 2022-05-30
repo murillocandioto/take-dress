@@ -1,15 +1,6 @@
 from .bd_conexao import conexao_mysql
-from funcoes import data_en_brasil
+from funcoes import data_en_brasil, truncate
 from prettytable import PrettyTable
-
-
-def truncate(f, n):
-
-    s = '{}'.format(f)
-    if 'e' in s or 'E' in s:
-        return '{0:.{1}f}'.format(f, n)
-    i, p, d = s.partition('.')
-    return '.'.join([i, (d+'0'*n)[:n]])
 
 
 def alugar_trajes(id_usuario, id_traje, data_aluguel, data_devolucao, valor):

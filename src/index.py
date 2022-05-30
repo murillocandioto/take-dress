@@ -140,8 +140,8 @@ def sobre():
     print("O aplicativo Take-Dress tem o objetivo de oferecer um serviço \nde cadastro e aluguel de trajes.\n")
     tableSobre = PrettyTable()
     tableSobre.field_names = ["Nome", "E-mail", "Matrícula"]
-    tableSobre.add_row(["Dora Yovana", "dora@gmail.com", "2840482123040"])
-    tableSobre.add_row(["Daoud Elias", "daoud@gmail.com", "2840482123040"])
+    tableSobre.add_row(["Daoud Elias", "daoud33@gmail.com", "2840481923002"])
+    tableSobre.add_row(["Dora Yovana", "dora252@gmail.com", "2840482123034"])
     tableSobre.add_row(
         ["Murillo Candioto", "murillocandioto@gmail.com", "2840482123040"])
     print(tableSobre)
@@ -182,6 +182,7 @@ def login_administrador():
         usuario.set_admin(True)
         usuario.set_id(pegar_id_usuario(usuario.get_usuario()))
         print("Login realizado com sucesso!")
+        time.sleep(2)
         menu_escolhas()
     else:
         print("Usuário ou senha incorretos!")
@@ -203,6 +204,7 @@ def login():
         usuario.set_id(pegar_id_usuario(usuario.get_usuario()))
         usuario.set_admin(False)
         print("Login realizado com sucesso!")
+        time.sleep(2)
         menu_escolhas()
     else:
         print("Usuário ou senha incorretos!")
@@ -469,6 +471,8 @@ def menu_escolhas():
             elif escolha == "15":
                 excluir_usuario_opcao()
             elif escolha == "16":
+                print("Saindo...")
+                time.sleep(2)
                 tela_inicial()
             else:
                 print("Opção inválida!")
@@ -490,6 +494,8 @@ def menu_escolhas():
             elif escolha == "5":
                 mostrar_dados_usuario()
             elif escolha == "6":
+                print("Saindo...")
+                time.sleep(2)
                 tela_inicial()
             else:
                 print("Opção inválida!")
